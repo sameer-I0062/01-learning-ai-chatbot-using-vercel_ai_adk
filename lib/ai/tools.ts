@@ -27,4 +27,25 @@ export const searchWeb = tool({
   },
 });
 
-export const tools = { search_web: searchWeb };
+export const scheduleAppointment = tool({
+  description:
+    "Schedule an appointment once the purpose, date/time, and name have all been collected from the user. Call this only after all three details are confirmed.",
+  inputSchema: z.object({
+    purpose: z
+      .string()
+      .describe("What the appointment is for, e.g. 'haircut', 'coaching call', 'wedding planner consultation'"),
+    dateTime: z.string().describe("The date and time for the appointment, as stated by the user"),
+    name: z.string().describe("The name of the person the appointment is for"),
+  }),
+  execute: async ({ purpose, dateTime, name }) => {
+    return {
+      status: "confirmed" as const,
+      purpose,
+      dateTime,
+      name,
+      confirmedAt: new Date().toISOString(),
+    };
+  },
+});
+
+export const tools = { search_web: searchWeb, schedule_appointment: scheduleAppointment };
