@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import type { ChatMessage } from "@/lib/ai/message";
 import { MODEL_CONTEXT_WINDOW } from "@/lib/ai/config";
-import { MarkdownViewer } from "@/components/markdown-viewer";
+import { MessageContent } from "@/components/message-content";
 
 function isDisconnectError(error: Error) {
   const message = error.message.toLowerCase();
