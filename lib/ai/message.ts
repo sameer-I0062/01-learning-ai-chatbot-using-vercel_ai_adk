@@ -1,4 +1,8 @@
-import type { InferUITools, UIMessage } from "ai";
+import type { InferUITools, LanguageModelUsage, UIMessage } from "ai";
 import type { tools } from "./tools";
 
-export type ChatMessage = UIMessage<unknown, never, InferUITools<typeof tools>>;
+export type ChatMessageMetadata = {
+  usage?: LanguageModelUsage;
+};
+
+export type ChatMessage = UIMessage<ChatMessageMetadata, never, InferUITools<typeof tools>>;
