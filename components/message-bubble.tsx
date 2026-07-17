@@ -1,5 +1,6 @@
 import type { ChatMessage } from "@/types/chat";
 import { MessageContent } from "@/components/message-content";
+import { ReasoningBlock } from "@/components/reasoning-block";
 import { SearchWebToolPart } from "@/components/tool-parts/search-web-part";
 import { ScheduleAppointmentToolPart } from "@/components/tool-parts/schedule-appointment-part";
 
@@ -18,6 +19,9 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
         {message.parts.map((part, i) => {
           if (part.type === "text") {
             return <MessageContent key={i} text={part.text} />;
+          }
+          if (part.type === "reasoning") {
+            return <ReasoningBlock key={i} part={part} />;
           }
           if (part.type === "tool-search_web") {
             return <SearchWebToolPart key={i} part={part} />;

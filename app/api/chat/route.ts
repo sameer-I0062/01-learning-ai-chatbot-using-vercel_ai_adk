@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       tools,
       stopWhen: stepCountIs(5),
       providerOptions: {
-        groq: { reasoningFormat: "hidden" },
+        groq: { reasoningFormat: "parsed" },
       },
     });
 
