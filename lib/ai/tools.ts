@@ -1,5 +1,6 @@
 import { tool } from "ai";
 import { z } from "zod";
+import { saveAppointment } from "@/lib/db/appointments";
 
 const TINYFISH_API_KEY = process.env.TINYFISH_API_KEY;
 
@@ -38,12 +39,20 @@ export const scheduleAppointment = tool({
     name: z.string().describe("The name of the person the appointment is for"),
   }),
   execute: async ({ purpose, dateTime, name }) => {
+    const confirmedAt = new Date().toISOString();
+
+    try {
+      await saveAppointment({ purpose, dateTime, name, confirmedAt });
+    } catch (err) {
+      console.error("Failed to save appointment to MongoDB:", err);
+    }
+
     return {
       status: "confirmed" as const,
       purpose,
       dateTime,
       name,
-      confirmedAt: new Date().toISOString(),
+      confirmedAt,
     };
   },
 });
