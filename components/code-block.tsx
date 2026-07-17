@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CheckIcon, CopyIcon } from "@/components/icons";
+import { COPY_FEEDBACK_DURATION_MS } from "@/lib/ui-constants";
 
 export function CodeBlock({ code, language }: { code: string; language?: string }) {
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  // Clear any pending "reset copied state" timer if the component unmounts
+  // (e.g. this message scrolls out and gets removed) before it fires.
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
 
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setCopied(false), COPY_FEEDBACK_DURATION_MS);
     } catch {
       // clipboard access denied or unavailable; nothing more we can do here
     }
@@ -39,22 +49,5 @@ export function CodeBlock({ code, language }: { code: string; language?: string 
         <code>{code}</code>
       </pre>
     </div>
-  );
-}
-
-function CopyIcon() {
-  return (
-    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4">
-      <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
-      <path d="M3.5 10.5h-1a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v1" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.6">
-      <path d="M3 8.5 6.5 12 13 4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   );
 }

@@ -1,5 +1,5 @@
 import type { InferUITools, LanguageModelUsage, UIMessage } from "ai";
-import type { tools } from "./tools";
+import type { tools } from "@/lib/ai/tools";
 
 export type ChatMessageMetadata = {
   usage?: LanguageModelUsage;

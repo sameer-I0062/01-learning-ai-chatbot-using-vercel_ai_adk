@@ -1,6 +1,7 @@
 import { tool } from "ai";
 import { z } from "zod";
 import { saveAppointment } from "@/lib/db/appointments";
+import { TOOL_FETCH_TIMEOUT_MS } from "@/lib/ai/config";
 
 const TINYFISH_API_KEY = process.env.TINYFISH_API_KEY;
 
@@ -16,15 +17,22 @@ export const searchWeb = tool({
     }
 
     const url = `https://api.search.tinyfish.ai?query=${encodeURIComponent(query)}`;
-    const response = await fetch(url, {
-      headers: { "X-API-Key": TINYFISH_API_KEY },
-    });
 
-    if (!response.ok) {
-      return { error: `Search failed with status ${response.status}` };
+    try {
+      const response = await fetch(url, {
+        headers: { "X-API-Key": TINYFISH_API_KEY },
+        signal: AbortSignal.timeout(TOOL_FETCH_TIMEOUT_MS),
+      });
+
+      if (!response.ok) {
+        return { error: `Search failed with status ${response.status}` };
+      }
+
+      return response.json();
+    } catch (err) {
+      const timedOut = err instanceof Error && err.name === "TimeoutError";
+      return { error: timedOut ? "Search timed out." : "Search failed." };
     }
-
-    return response.json();
   },
 });
 

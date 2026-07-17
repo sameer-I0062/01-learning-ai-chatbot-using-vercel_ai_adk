@@ -1,11 +1,5 @@
 import { getMongoClient } from "@/lib/db/mongodb";
-
-export type AppointmentDoc = {
-  purpose: string;
-  dateTime: string;
-  name: string;
-  confirmedAt: string;
-};
+import type { AppointmentDoc } from "@/types/appointment";
 
 export async function saveAppointment(appointment: AppointmentDoc): Promise<void> {
   const client = await getMongoClient();

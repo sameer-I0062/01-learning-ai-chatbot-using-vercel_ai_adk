@@ -1,6 +1,4 @@
-export type MessagePart =
-  | { type: "text"; content: string }
-  | { type: "code"; language?: string; content: string };
+import type { MessagePart } from "@/types/message-parts";
 
 const CODE_BLOCK_REGEX = /```([\w+-]*)\n?([\s\S]*?)```/g;
 
