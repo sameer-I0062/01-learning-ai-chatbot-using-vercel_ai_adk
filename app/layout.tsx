@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chat AI",
+  title: "Paltu AI",
   description: "A general-purpose chat assistant with live web search.",
 };
 
